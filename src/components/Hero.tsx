@@ -205,85 +205,187 @@ const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right side - 3D floating elements */}
+          {/* Right side - Coding Animation Showcase */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
-            className="relative h-[600px] flex items-center justify-center"
+            className="relative h-[500px] md:h-[600px] flex items-center justify-center"
           >
-            {/* Floating geometric shapes */}
-            <div className="relative w-full h-full">
+            {/* Code Editor Mockup */}
+            <div className="relative w-full max-w-lg">
+              {/* Terminal Window */}
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.8 }}
+                className="bg-background/20 backdrop-blur-xl border border-border/30 rounded-xl overflow-hidden glow-effect"
+              >
+                {/* Terminal Header */}
+                <div className="flex items-center px-4 py-3 bg-muted/10 border-b border-border/20">
+                  <div className="flex space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="mx-4 text-xs text-muted-foreground font-jetbrains">
+                    portfolio.tsx
+                  </div>
+                </div>
+
+                {/* Code Content */}
+                <div className="p-6 space-y-3 font-jetbrains text-sm">
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1.2 }}
+                    className="text-purple-400"
+                  >
+                    <span className="text-blue-400">const</span> developer = {"{"}
+                  </motion.div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1.4 }}
+                    className="ml-4"
+                  >
+                    <span className="text-cyan-400">name:</span> <span className="text-green-400">"Alex Johnson"</span>,
+                  </motion.div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1.6 }}
+                    className="ml-4"
+                  >
+                    <span className="text-cyan-400">skills:</span> [<span className="text-green-400">"React"</span>, <span className="text-green-400">"Node.js"</span>, <span className="text-green-400">"TypeScript"</span>],
+                  </motion.div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1.8 }}
+                    className="ml-4"
+                  >
+                    <span className="text-cyan-400">passion:</span> <span className="text-green-400">"Creating Amazing UX"</span>,
+                  </motion.div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 2.0 }}
+                    className="ml-4"
+                  >
+                    <span className="text-cyan-400">status:</span> <span className="text-green-400">"Available for hire"</span>
+                  </motion.div>
+                  
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 2.2 }}
+                    className="text-purple-400"
+                  >
+                    {"};"}
+                  </motion.div>
+                </div>
+              </motion.div>
+
+              {/* Floating Code Elements */}
               <motion.div
                 animate={{ 
-                  y: [0, -20, 0],
-                  rotate: [0, 180, 360] 
+                  y: [0, -10, 0],
+                  rotate: [0, 5, 0] 
                 }}
                 transition={{ 
-                  duration: 8, 
+                  duration: 4, 
                   repeat: Infinity, 
                   ease: "easeInOut" 
                 }}
-                className="absolute top-20 left-20 w-20 h-20 bg-gradient-to-br from-primary to-accent rounded-lg glow-effect"
-              />
-              
+                className="absolute -top-8 -left-8 bg-primary/20 backdrop-blur-sm border border-primary/30 rounded-lg p-3 font-jetbrains text-xs text-primary"
+              >
+                &lt;React/&gt;
+              </motion.div>
+
               <motion.div
                 animate={{ 
-                  y: [0, 20, 0],
-                  rotate: [360, 180, 0] 
+                  y: [0, 15, 0],
+                  x: [0, 5, 0] 
+                }}
+                transition={{ 
+                  duration: 5, 
+                  repeat: Infinity, 
+                  ease: "easeInOut",
+                  delay: 1 
+                }}
+                className="absolute -top-4 -right-12 bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-lg p-3 font-jetbrains text-xs text-accent"
+              >
+                {"{ }"}
+              </motion.div>
+
+              <motion.div
+                animate={{ 
+                  y: [0, -8, 0],
+                  rotate: [0, -3, 0] 
                 }}
                 transition={{ 
                   duration: 6, 
                   repeat: Infinity, 
                   ease: "easeInOut",
-                  delay: 1
+                  delay: 2 
                 }}
-                className="absolute top-40 right-16 w-16 h-16 bg-gradient-to-br from-accent to-primary rounded-full animate-pulse-glow"
-              />
-              
+                className="absolute -bottom-6 -left-6 bg-green-500/20 backdrop-blur-sm border border-green-500/30 rounded-lg p-2 font-jetbrains text-xs text-green-400"
+              >
+                npm run dev
+              </motion.div>
+
               <motion.div
                 animate={{ 
-                  y: [0, -15, 0],
-                  x: [0, 10, 0],
-                  rotate: [0, 90, 180, 270, 360] 
-                }}
-                transition={{ 
-                  duration: 10, 
-                  repeat: Infinity, 
-                  ease: "easeInOut",
-                  delay: 2
-                }}
-                className="absolute bottom-32 left-16 w-12 h-12 bg-gradient-to-br from-primary/50 to-accent/50 transform rotate-45 backdrop-blur-sm border border-primary/20"
-              />
-              
-              <motion.div
-                animate={{ 
-                  y: [0, 25, 0],
-                  rotate: [0, -180, -360] 
+                  y: [0, 12, 0],
+                  rotate: [0, 2, 0] 
                 }}
                 transition={{ 
                   duration: 7, 
                   repeat: Infinity, 
                   ease: "easeInOut",
-                  delay: 0.5
+                  delay: 0.5 
                 }}
-                className="absolute bottom-20 right-24 w-24 h-6 bg-gradient-to-r from-accent to-primary rounded-full glow-effect"
+                className="absolute -bottom-8 -right-4 bg-blue-500/20 backdrop-blur-sm border border-blue-500/30 rounded-lg p-2 font-jetbrains text-xs text-blue-400"
+              >
+                git commit
+              </motion.div>
+
+              {/* Cursor Animation */}
+              <motion.div
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ duration: 1, repeat: Infinity }}
+                className="absolute bottom-6 right-6 w-2 h-5 bg-primary"
               />
             </div>
 
-            {/* Central glowing orb */}
-            <motion.div
-              animate={{ 
-                scale: [1, 1.1, 1],
-                opacity: [0.5, 0.8, 0.5] 
-              }}
-              transition={{ 
-                duration: 4, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
-              }}
-              className="absolute inset-0 m-auto w-32 h-32 bg-gradient-radial from-primary/30 to-transparent rounded-full blur-xl"
-            />
+            {/* Background Code Rain Effect */}
+            <div className="absolute inset-0 -z-10 overflow-hidden">
+              {[...Array(8)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ y: -100, opacity: 0 }}
+                  animate={{ 
+                    y: [0, 400],
+                    opacity: [0, 0.3, 0]
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    delay: i * 1.5,
+                    ease: "linear"
+                  }}
+                  className="absolute font-jetbrains text-xs text-primary/20"
+                  style={{ left: `${10 + i * 12}%` }}
+                >
+                  {['function', 'const', 'let', 'return', 'if', 'else', 'for', 'while'][i]}
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </motion.div>

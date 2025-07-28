@@ -1,9 +1,18 @@
-import { motion } from 'framer-motion';
-import { ExternalLink, Github } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ExternalLink, Github, Rocket, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useRef } from 'react';
 
 const Projects = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const cardsY = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const projects = [
     {
       title: 'E-Commerce Platform',
@@ -83,8 +92,41 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="py-20">
-      <div className="container mx-auto px-6">
+    <section ref={sectionRef} id="projects" className="py-20 relative overflow-hidden">
+      {/* Parallax Background */}
+      <motion.div
+        style={{ y: backgroundY }}
+        className="absolute inset-0 bg-gradient-radial from-accent/5 via-transparent to-primary/5"
+      />
+      
+      {/* Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              y: [0, -30, 0],
+              rotate: [0, 360],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{
+              duration: 15 + i * 5,
+              repeat: Infinity,
+              delay: i * 4,
+              ease: "easeInOut"
+            }}
+            className="absolute"
+            style={{
+              left: `${10 + i * 25}%`,
+              top: `${10 + (i % 2) * 70}%`
+            }}
+          >
+            <div className="w-12 h-12 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg backdrop-blur-sm border border-primary/20" />
+          </motion.div>
+        ))}
+      </div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -101,92 +143,122 @@ const Projects = () => {
         </motion.div>
 
         <motion.div
+          style={{ y: cardsY }}
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          className="grid lg:grid-cols-2 gap-8"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8"
         >
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
               variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className={`${project.featured ? 'lg:col-span-2' : ''}`}
+              whileHover={{ 
+                y: -10,
+                scale: 1.02,
+                transition: { duration: 0.3, type: "spring", stiffness: 300 }
+              }}
+              className={`${project.featured ? 'lg:col-span-2' : ''} group`}
             >
-              <Card className="glass-effect border-border/50 hover-glow group overflow-hidden h-full">
-                <div className={`${project.featured ? 'lg:flex lg:items-center' : ''}`}>
+              <Card className="glass-effect border-border/50 hover-glow overflow-hidden h-full relative">
+                {/* Animated Background Gradient */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100"
+                  transition={{ duration: 0.4 }}
+                />
+                
+                <div className={`relative z-10 ${project.featured ? 'lg:flex lg:items-center' : ''}`}>
                   {/* Project Image */}
                   <div className={`relative overflow-hidden ${project.featured ? 'lg:w-1/2' : ''}`}>
-                    <div 
-                      className="h-64 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center"
+                    <motion.div 
+                      className="h-48 sm:h-64 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <div className="text-6xl opacity-30">🚀</div>
-                    </div>
-                    
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="glass-effect"
-                        asChild
+                      {/* Project Icon */}
+                      <motion.div
+                        animate={{ 
+                          rotate: [0, 10, -10, 0],
+                          scale: [1, 1.1, 1]
+                        }}
+                        transition={{ 
+                          duration: 4,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                        className="text-4xl sm:text-6xl opacity-30"
                       >
-                        <a href={project.github} target="_blank" rel="noopener noreferrer">
-                          <Github className="w-4 h-4 mr-2" />
-                          Code
-                        </a>
-                      </Button>
-                      <Button
-                        size="sm"
-                        className="bg-primary hover:bg-primary/90"
-                        asChild
-                      >
-                        <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                          <ExternalLink className="w-4 h-4 mr-2" />
-                          Demo
-                        </a>
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Project Content */}
-                  <CardContent className={`p-6 ${project.featured ? 'lg:w-1/2' : ''}`}>
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300">
-                          {project.title}
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {project.description}
-                        </p>
-                      </div>
-
-                      {/* Tech Stack */}
-                      <div className="flex flex-wrap gap-2">
-                        {project.tech.map((tech) => (
-                          <span
+                        🚀
+                      </motion.div>
+                      
+                      {/* Featured Badge */}
+                      {project.featured && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute top-4 right-4 bg-accent/20 backdrop-blur-sm border border-accent/30 rounded-full p-2"
+                        >
+                          <Star className="w-4 h-4 text-accent" />
+                        </motion.div>
+                      )}
+                      
+                      {/* Floating Tech Elements */}
+                      <div className="absolute inset-0 overflow-hidden">
+                        {project.tech.slice(0, 3).map((tech, i) => (
+                          <motion.div
                             key={tech}
-                            className="px-3 py-1 text-xs font-jetbrains bg-primary/10 text-primary rounded-full border border-primary/20"
+                            animate={{
+                              y: [0, -10, 0],
+                              x: [0, 5, 0],
+                              opacity: [0.3, 0.6, 0.3]
+                            }}
+                            transition={{
+                              duration: 3 + i,
+                              repeat: Infinity,
+                              delay: i * 0.5
+                            }}
+                            className="absolute font-jetbrains text-xs text-primary/40"
+                            style={{
+                              left: `${20 + i * 30}%`,
+                              top: `${20 + i * 15}%`
+                            }}
                           >
                             {tech}
-                          </span>
+                          </motion.div>
                         ))}
                       </div>
-
-                      {/* Links */}
-                      <div className="flex space-x-4 pt-4">
+                    </motion.div>
+                    
+                    {/* Enhanced Hover Overlay */}
+                    <motion.div 
+                      className="absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 flex items-center justify-center space-x-4"
+                      transition={{ duration: 0.3 }}
+                    >
+                      <motion.div
+                        initial={{ scale: 0, rotate: -180 }}
+                        whileInView={{ scale: 1, rotate: 0 }}
+                        whileHover={{ scale: 1.1 }}
+                      >
                         <Button
-                          variant="outline"
                           size="sm"
+                          variant="outline"
                           className="glass-effect"
                           asChild
                         >
                           <a href={project.github} target="_blank" rel="noopener noreferrer">
                             <Github className="w-4 h-4 mr-2" />
-                            GitHub
+                            Code
                           </a>
                         </Button>
+                      </motion.div>
+                      
+                      <motion.div
+                        initial={{ scale: 0, rotate: 180 }}
+                        whileInView={{ scale: 1, rotate: 0 }}
+                        whileHover={{ scale: 1.1 }}
+                        transition={{ delay: 0.1 }}
+                      >
                         <Button
                           size="sm"
                           className="bg-primary hover:bg-primary/90"
@@ -194,9 +266,90 @@ const Projects = () => {
                         >
                           <a href={project.demo} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="w-4 h-4 mr-2" />
-                            Live Demo
+                            Demo
                           </a>
                         </Button>
+                      </motion.div>
+                    </motion.div>
+                  </div>
+
+                  {/* Enhanced Project Content */}
+                  <CardContent className={`p-6 sm:p-8 ${project.featured ? 'lg:w-1/2' : ''} relative z-10`}>
+                    <div className="space-y-6">
+                      <div>
+                        <div className="flex items-center gap-3 mb-3">
+                          {project.featured && (
+                            <motion.div
+                              whileHover={{ rotate: 360 }}
+                              transition={{ duration: 0.5 }}
+                              className="w-8 h-8 rounded-lg bg-accent/20 flex items-center justify-center"
+                            >
+                              <Rocket className="w-4 h-4 text-accent" />
+                            </motion.div>
+                          )}
+                          <h3 className="text-lg sm:text-xl font-bold group-hover:text-primary transition-colors duration-300">
+                            {project.title}
+                          </h3>
+                        </div>
+                        <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
+                          {project.description}
+                        </p>
+                      </div>
+
+                      {/* Enhanced Tech Stack */}
+                      <div>
+                        <h4 className="text-sm font-medium mb-3 text-muted-foreground">Built with</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {project.tech.map((tech, techIndex) => (
+                            <motion.span
+                              key={tech}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              whileInView={{ opacity: 1, scale: 1 }}
+                              viewport={{ once: true }}
+                              transition={{ delay: techIndex * 0.1 }}
+                              whileHover={{ scale: 1.05, y: -2 }}
+                              className="px-3 py-1.5 text-xs font-jetbrains bg-primary/10 text-primary rounded-full border border-primary/20 hover:bg-primary/20 transition-colors duration-300"
+                            >
+                              {tech}
+                            </motion.span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Enhanced Links */}
+                      <div className="flex flex-col sm:flex-row gap-3 pt-2">
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="glass-effect w-full sm:w-auto"
+                            asChild
+                          >
+                            <a href={project.github} target="_blank" rel="noopener noreferrer">
+                              <Github className="w-4 h-4 mr-2" />
+                              GitHub
+                            </a>
+                          </Button>
+                        </motion.div>
+                        
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <Button
+                            size="sm"
+                            className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
+                            asChild
+                          >
+                            <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              Live Demo
+                            </a>
+                          </Button>
+                        </motion.div>
                       </div>
                     </div>
                   </CardContent>

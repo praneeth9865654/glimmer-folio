@@ -239,6 +239,62 @@
     will-change: transform, opacity;
   }
 
+  /* Responsive Design Improvements */
+  @media (max-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    .hero-text {
+      font-size: 2.5rem !important;
+      line-height: 1.2;
+    }
+    
+    .text-5xl {
+      font-size: 2.5rem !important;
+    }
+    
+    .text-7xl {
+      font-size: 3rem !important;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-text {
+      font-size: 2rem !important;
+    }
+    
+    .text-3xl {
+      font-size: 1.75rem !important;
+    }
+    
+    .text-4xl {
+      font-size: 2rem !important;
+    }
+    
+    .text-5xl {
+      font-size: 2rem !important;
+    }
+    
+    .text-7xl {
+      font-size: 2.5rem !important;
+    }
+  }
+
+  /* Enhanced Parallax Performance */
+  .parallax-element {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
   /* Reduced motion for accessibility */
   @media (prefers-reduced-motion: reduce) {
     .floating-particle,
@@ -251,6 +307,10 @@
       animation: none;
       opacity: 1;
       transform: none;
+    }
+    
+    .parallax-element {
+      transform: none !important;
     }
   }
 }

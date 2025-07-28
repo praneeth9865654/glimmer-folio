@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import { Calendar, MapPin, ExternalLink } from 'lucide-react';
+import { Calendar, MapPin, ExternalLink, Code, Zap, Trophy } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -11,7 +11,8 @@ const Experience = () => {
     offset: ["start end", "end start"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -200]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   const experiences = [
@@ -75,16 +76,47 @@ const Experience = () => {
 
   return (
     <section ref={sectionRef} id="experience" className="py-20 relative overflow-hidden">
-      {/* Parallax Background */}
+      {/* Enhanced Parallax Background */}
       <motion.div
-        style={{ y }}
+        style={{ y: backgroundY }}
         className="absolute inset-0 bg-gradient-conic from-primary/5 via-transparent to-accent/5"
       />
+      <motion.div
+        style={{ y: backgroundY, scale: useTransform(scrollYProgress, [0, 1], [1, 1.1]) }}
+        className="absolute inset-0 bg-gradient-radial from-accent/3 via-transparent to-primary/3"
+      />
       
-      <div className="container mx-auto px-6">
+      {/* Floating Code Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              y: [0, -20, 0],
+              x: [0, 10, 0],
+              rotate: [0, 5, 0]
+            }}
+            transition={{
+              duration: 8 + i * 2,
+              repeat: Infinity,
+              delay: i * 3,
+              ease: "easeInOut"
+            }}
+            className="absolute font-jetbrains text-xs text-primary/10"
+            style={{
+              left: `${15 + i * 15}%`,
+              top: `${20 + (i % 3) * 30}%`
+            }}
+          >
+            {['</>', '{}', '()', '[]', '=>', '&&'][i]}
+          </motion.div>
+        ))}
+      </div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           style={{ opacity }}
-          className="max-w-5xl mx-auto"
+          className="max-w-6xl mx-auto"
         >
           {/* Section Header */}
           <motion.div
@@ -116,27 +148,58 @@ const Experience = () => {
               {experiences.map((exp, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
+                  initial={{ opacity: 0, y: 60, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ 
+                    duration: 0.8, 
+                    delay: index * 0.2,
+                    type: "spring",
+                    stiffness: 100
+                  }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    y: -5,
+                    transition: { duration: 0.3 }
+                  }}
+                  className="group"
                 >
-                  <Card className="glass-effect border-border/50 hover-glow">
-                    <CardContent className="p-8">
-                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
-                        <div className="flex-1">
-                          <h4 className="text-xl font-bold mb-2">{exp.title}</h4>
-                          <div className="flex items-center space-x-4 text-muted-foreground mb-2">
-                            <span className="font-medium text-primary">{exp.company}</span>
-                            <div className="flex items-center space-x-1">
-                              <MapPin className="w-4 h-4" />
-                              <span className="text-sm">{exp.location}</span>
+                  <Card className="glass-effect border-border/50 hover-glow overflow-hidden">
+                    <CardContent className="p-6 sm:p-8 relative">
+                      {/* Animated Background */}
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100"
+                        transition={{ duration: 0.3 }}
+                      />
+                      
+                      <div className="relative z-10">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-3">
+                              <motion.div
+                                whileHover={{ rotate: 360 }}
+                                transition={{ duration: 0.5 }}
+                                className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center"
+                              >
+                                <Code className="w-5 h-5 text-primary" />
+                              </motion.div>
+                              <h4 className="text-xl font-bold group-hover:text-primary transition-colors duration-300">
+                                {exp.title}
+                              </h4>
                             </div>
-                          </div>
-                          <div className="flex items-center space-x-1 text-muted-foreground mb-4">
-                            <Calendar className="w-4 h-4" />
-                            <span className="text-sm">{exp.period}</span>
+                            
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-muted-foreground mb-2">
+                              <span className="font-medium text-primary">{exp.company}</span>
+                              <div className="flex items-center space-x-1">
+                                <MapPin className="w-4 h-4" />
+                                <span className="text-sm">{exp.location}</span>
+                              </div>
+                            </div>
+                            
+                            <div className="flex items-center space-x-1 text-muted-foreground mb-4">
+                              <Calendar className="w-4 h-4" />
+                              <span className="text-sm">{exp.period}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -145,37 +208,58 @@ const Experience = () => {
                         {exp.description}
                       </p>
 
-                      {/* Technologies */}
-                      <div className="mb-6">
-                        <h5 className="font-medium mb-3">Technologies Used</h5>
-                        <div className="flex flex-wrap gap-2">
-                          {exp.technologies.map((tech, techIndex) => (
-                            <Badge
-                              key={techIndex}
-                              variant="secondary"
-                              className="glass-effect"
-                            >
-                              {tech}
-                            </Badge>
-                          ))}
+                        {/* Technologies */}
+                        <div className="mb-6 relative z-10">
+                          <div className="flex items-center gap-2 mb-4">
+                            <Zap className="w-4 h-4 text-accent" />
+                            <h5 className="font-medium">Technologies Used</h5>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {exp.technologies.map((tech, techIndex) => (
+                              <motion.div
+                                key={techIndex}
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: techIndex * 0.1 }}
+                                whileHover={{ scale: 1.1 }}
+                              >
+                                <Badge
+                                  variant="secondary"
+                                  className="glass-effect hover:bg-primary/20 transition-colors duration-300"
+                                >
+                                  {tech}
+                                </Badge>
+                              </motion.div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Achievements */}
-                      <div>
-                        <h5 className="font-medium mb-3">Key Achievements</h5>
-                        <ul className="space-y-2">
-                          {exp.achievements.map((achievement, achIndex) => (
-                            <li
-                              key={achIndex}
-                              className="flex items-start space-x-2 text-muted-foreground"
-                            >
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                              <span>{achievement}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                        {/* Achievements */}
+                        <div className="relative z-10">
+                          <div className="flex items-center gap-2 mb-4">
+                            <Trophy className="w-4 h-4 text-accent" />
+                            <h5 className="font-medium">Key Achievements</h5>
+                          </div>
+                          <ul className="space-y-3">
+                            {exp.achievements.map((achievement, achIndex) => (
+                              <motion.li
+                                key={achIndex}
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: achIndex * 0.1 }}
+                                className="flex items-start space-x-3 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
+                              >
+                                <motion.div 
+                                  className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"
+                                  whileHover={{ scale: 1.5 }}
+                                />
+                                <span className="leading-relaxed">{achievement}</span>
+                              </motion.li>
+                            ))}
+                          </ul>
+                        </div>
                     </CardContent>
                   </Card>
                 </motion.div>
