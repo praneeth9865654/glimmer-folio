@@ -68,7 +68,7 @@ const About = () => {
             </p>
           </motion.div>
 
-          {/* Personal Story */}
+          {/* Personal Story with Animated Text */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -78,23 +78,37 @@ const About = () => {
           >
             <Card className="glass-effect border-border/50 hover-glow">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-6">My Journey</h3>
-                <div className="space-y-4 text-muted-foreground">
-                  <p>
-                    My journey into development started with curiosity about how websites work. 
-                    What began as tinkering with HTML and CSS evolved into a deep passion for 
-                    creating comprehensive digital solutions.
-                  </p>
-                  <p>
-                    Over the years, I've had the privilege of working with startups and 
-                    established companies, helping them bring their visions to life through 
-                    thoughtful development and user-centric design.
-                  </p>
-                  <p>
-                    When I'm not coding, you'll find me exploring new technologies, contributing 
-                    to open source projects, or mentoring aspiring developers in the community.
-                  </p>
+                <h3 className="text-2xl font-bold mb-6 hero-text">My Journey</h3>
+                
+                {/* Animated Description Lines */}
+                <div className="space-y-6 overflow-hidden">
+                  <motion.div
+                    style={{ 
+                      x: useTransform(scrollYProgress, [0, 1], [0, -50])
+                    }}
+                    className="text-2xl lg:text-3xl font-black leading-tight bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
+                  >
+                    Crafting digital experiences that inspire and innovate
+                  </motion.div>
+                  
+                  <motion.div
+                    style={{ 
+                      x: useTransform(scrollYProgress, [0, 1], [0, 50])
+                    }}
+                    className="text-2xl lg:text-3xl font-black leading-tight bg-gradient-to-r from-accent via-cyan-400 to-primary bg-clip-text text-transparent"
+                  >
+                    Turning complex problems into elegant solutions
+                  </motion.div>
                 </div>
+                
+                <motion.p 
+                  className="text-muted-foreground leading-relaxed mt-8"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  Every project is an opportunity to push boundaries and create meaningful impact through technology.
+                </motion.p>
               </CardContent>
             </Card>
           </motion.div>

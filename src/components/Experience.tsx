@@ -12,8 +12,7 @@ const Experience = () => {
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const lineProgress = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
   const experiences = [
     {
@@ -76,48 +75,48 @@ const Experience = () => {
 
   return (
     <section ref={sectionRef} id="experience" className="py-20 relative overflow-hidden">
-      {/* Enhanced Parallax Background */}
-      <motion.div
-        style={{ y: backgroundY }}
-        className="absolute inset-0 bg-gradient-conic from-primary/5 via-transparent to-accent/5"
-      />
-      <motion.div
-        style={{ y: backgroundY, scale: useTransform(scrollYProgress, [0, 1], [1, 1.1]) }}
-        className="absolute inset-0 bg-gradient-radial from-accent/3 via-transparent to-primary/3"
-      />
+      {/* Modern Timeline Background */}
+      <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent transform -translate-x-1/2" />
       
-      {/* Floating Code Elements */}
+      {/* Animated Progress Line */}
+      <motion.div 
+        className="absolute left-1/2 top-0 w-px bg-gradient-to-b from-primary via-accent to-primary transform -translate-x-1/2 origin-top"
+        style={{ 
+          scaleY: useTransform(scrollYProgress, [0, 1], [0, 1]),
+          height: "100%"
+        }}
+      />
+
+      {/* Floating Geometric Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(6)].map((_, i) => (
+        {[...Array(8)].map((_, i) => (
           <motion.div
             key={i}
             animate={{
-              y: [0, -20, 0],
-              x: [0, 10, 0],
-              rotate: [0, 5, 0]
+              y: [0, -30, 0],
+              rotate: [0, 360],
+              scale: [1, 1.2, 1]
             }}
             transition={{
-              duration: 8 + i * 2,
+              duration: 15 + i * 3,
               repeat: Infinity,
-              delay: i * 3,
-              ease: "easeInOut"
+              delay: i * 2,
+              ease: "linear"
             }}
-            className="absolute font-jetbrains text-xs text-primary/10"
+            className="absolute"
             style={{
-              left: `${15 + i * 15}%`,
-              top: `${20 + (i % 3) * 30}%`
+              left: `${10 + i * 12}%`,
+              top: `${15 + (i % 4) * 20}%`
             }}
           >
-            {['</>', '{}', '()', '[]', '=>', '&&'][i]}
+            <div className={`w-2 h-2 ${i % 3 === 0 ? 'bg-primary/20' : i % 3 === 1 ? 'bg-accent/20' : 'bg-cyan-500/20'} 
+              ${i % 2 === 0 ? 'rounded-full' : 'rotate-45'}`} />
           </motion.div>
         ))}
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          style={{ opacity }}
-          className="max-w-6xl mx-auto"
-        >
+        <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -148,44 +147,71 @@ const Experience = () => {
               {experiences.map((exp, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 60, scale: 0.9 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
                   transition={{ 
-                    duration: 0.8, 
-                    delay: index * 0.2,
+                    duration: 1, 
+                    delay: index * 0.3,
                     type: "spring",
-                    stiffness: 100
+                    stiffness: 80
                   }}
-                  whileHover={{ 
-                    scale: 1.02,
-                    y: -5,
-                    transition: { duration: 0.3 }
-                  }}
-                  className="group"
+                  className={`group relative ${index % 2 === 0 ? 'lg:pr-8' : 'lg:pl-8'}`}
                 >
-                  <Card className="glass-effect border-border/50 hover-glow overflow-hidden">
+                  {/* Timeline Dot */}
+                  <motion.div 
+                    className="absolute top-8 left-1/2 w-4 h-4 bg-primary rounded-full transform -translate-x-1/2 z-20 border-4 border-background"
+                    initial={{ scale: 0 }}
+                    whileInView={{ scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.3 + 0.5 }}
+                  />
+                  
+                  {/* Connecting Lines */}
+                  <motion.div 
+                    className={`absolute top-8 ${index % 2 === 0 ? 'right-1/2 left-8' : 'left-1/2 right-8'} h-px bg-gradient-to-r from-primary/50 to-transparent`}
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.3 + 0.7, duration: 0.8 }}
+                    style={{ originX: index % 2 === 0 ? 1 : 0 }}
+                  />
+
+                  <Card className={`glass-effect border-border/50 hover-glow overflow-hidden ${index % 2 === 0 ? 'lg:mr-8' : 'lg:ml-8'}`}>
                     <CardContent className="p-6 sm:p-8 relative">
-                      {/* Animated Background */}
+                      {/* Modern Background Pattern */}
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100"
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100"
                         transition={{ duration: 0.3 }}
-                      />
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+                        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+                        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
+                      </motion.div>
                       
                       <div className="relative z-10">
                         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-3">
                               <motion.div
-                                whileHover={{ rotate: 360 }}
+                                whileHover={{ rotate: 360, scale: 1.1 }}
                                 transition={{ duration: 0.5 }}
-                                className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center"
+                                className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/20"
                               >
-                                <Code className="w-5 h-5 text-primary" />
+                                <Code className="w-6 h-6 text-primary" />
                               </motion.div>
-                              <h4 className="text-xl font-bold group-hover:text-primary transition-colors duration-300">
-                                {exp.title}
-                              </h4>
+                              <div>
+                                <h4 className="text-xl font-bold group-hover:text-primary transition-colors duration-300">
+                                  {exp.title}
+                                </h4>
+                                <motion.div 
+                                  className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mt-1"
+                                  initial={{ scaleX: 0 }}
+                                  whileInView={{ scaleX: 1 }}
+                                  viewport={{ once: true }}
+                                  transition={{ delay: index * 0.3 + 1 }}
+                                />
+                              </div>
                             </div>
                             
                             <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-muted-foreground mb-2">
@@ -328,7 +354,7 @@ const Experience = () => {
               </Card>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

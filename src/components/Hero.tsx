@@ -184,22 +184,28 @@ const Hero = () => {
               </Button>
             </motion.div>
 
-            {/* Social links */}
+            {/* Social Links */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.2 }}
-              className="flex space-x-6 pt-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="flex space-x-6"
             >
-              {['GitHub', 'LinkedIn', 'Twitter'].map((social, index) => (
+              {[
+                { name: 'GitHub', href: '#', icon: '🌿' },
+                { name: 'LinkedIn', href: '#', icon: '💼' },
+                { name: 'Gmail', href: '#', icon: '📧' }
+              ].map((social, index) => (
                 <motion.a
-                  key={social}
-                  href="#"
-                  whileHover={{ scale: 1.1 }}
+                  key={social.name}
+                  href={social.href}
+                  whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-300"
+                  className="glass-effect p-3 rounded-xl border border-border/50 hover-glow transition-all duration-300 group"
                 >
-                  {social}
+                  <span className="text-xl group-hover:scale-110 transition-transform duration-300 block">
+                    {social.icon}
+                  </span>
                 </motion.a>
               ))}
             </motion.div>
