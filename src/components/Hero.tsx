@@ -1,20 +1,125 @@
-import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ChevronDown, Download, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
 import Scene3D from './Scene3D';
 
 const Hero = () => {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated background */}
-      <div className="absolute inset-0 bg-gradient-radial from-primary/10 via-transparent to-transparent" />
-      
-      {/* 3D Scene Background */}
-      <div className="absolute inset-0 -z-10">
-        <Scene3D />
-      </div>
+  const heroRef = useRef<HTMLElement>(null);
+  const particlesRef = useRef<HTMLDivElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"]
+  });
 
-      <div className="container mx-auto px-6 z-10">
+  // Heavy parallax transforms for different layers
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -500]);
+  const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+  const particlesY = useTransform(scrollYProgress, [0, 1], [0, -300]);
+  const particlesOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
+  // GSAP heavy animations on mount
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Floating particles animation
+      gsap.to('.floating-particle', {
+        y: 'random(-100, 100)',
+        x: 'random(-50, 50)',
+        rotation: 'random(0, 360)',
+        duration: 'random(4, 8)',
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        stagger: 0.2
+      });
+
+      // Background pulse animation
+      gsap.to('.bg-pulse', {
+        scale: 1.1,
+        opacity: 0.8,
+        duration: 4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'power2.inOut'
+      });
+
+      // Text reveal animations
+      gsap.fromTo('.hero-reveal', 
+        { y: 100, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: 'power3.out' }
+      );
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.querySelector(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const downloadResume = () => {
+    // Create a dummy resume download
+    const link = document.createElement('a');
+    link.href = '#'; // In real app, this would be the actual resume URL
+    link.download = 'Alex-Johnson-Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Heavy Parallax Background Layers */}
+      <motion.div
+        ref={backgroundRef}
+        style={{ y: backgroundY, scale: backgroundScale }}
+        className="absolute inset-0 bg-gradient-radial from-primary/20 via-primary/5 to-transparent bg-pulse"
+      />
+      
+      <motion.div
+        style={{ y: backgroundY }}
+        className="absolute inset-0 bg-gradient-conic from-accent/10 via-transparent to-primary/10 bg-pulse"
+      />
+
+      {/* 3D Scene Background with Parallax */}
+      <motion.div 
+        style={{ y: particlesY, opacity: particlesOpacity }}
+        className="absolute inset-0 -z-10"
+      >
+        <Scene3D />
+      </motion.div>
+
+      {/* Floating Particles */}
+      <motion.div
+        ref={particlesRef}
+        style={{ y: particlesY, opacity: particlesOpacity }}
+        className="absolute inset-0"
+      >
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="floating-particle absolute w-2 h-2 bg-primary/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 4}s`
+            }}
+          />
+        ))}
+      </motion.div>
+
+      <motion.div 
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="container mx-auto px-6 z-10"
+      >
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
           <motion.div
@@ -25,10 +130,7 @@ const Hero = () => {
           >
             {/* Greeting */}
             <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-lg text-muted-foreground font-jetbrains"
+              className="text-lg text-muted-foreground font-jetbrains hero-reveal"
             >
               Hi there, I'm
             </motion.p>
@@ -36,19 +138,13 @@ const Hero = () => {
             {/* Name with typewriter effect */}
             <div className="space-y-4">
               <motion.h1
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="text-5xl lg:text-7xl font-bold"
+                className="text-5xl lg:text-7xl font-bold hero-reveal"
               >
                 <span className="hero-text">Alex Johnson</span>
               </motion.h1>
               
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="overflow-hidden"
+                className="overflow-hidden hero-reveal"
               >
                 <h2 className="text-2xl lg:text-4xl text-muted-foreground font-jetbrains whitespace-nowrap border-r-2 animate-typewriter animate-blink">
                   Full-Stack Developer
@@ -58,10 +154,7 @@ const Hero = () => {
 
             {/* Description */}
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="text-lg text-muted-foreground max-w-2xl leading-relaxed"
+              className="text-lg text-muted-foreground max-w-2xl leading-relaxed hero-reveal"
             >
               I craft exceptional digital experiences with cutting-edge technologies. 
               Specializing in React, Node.js, and modern web development practices 
@@ -70,22 +163,23 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col sm:flex-row gap-4 hero-reveal"
             >
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary/90 glow-effect transition-all duration-300 hover:scale-105"
+                onClick={() => scrollToSection('#projects')}
+                className="bg-primary hover:bg-primary/90 glow-effect transition-all duration-300 hover:scale-105 group"
               >
+                <ExternalLink className="w-4 h-4 mr-2 group-hover:rotate-45 transition-transform" />
                 View My Work
               </Button>
               <Button 
                 variant="outline" 
                 size="lg"
-                className="glass-effect hover-glow transition-all duration-300"
+                onClick={downloadResume}
+                className="glass-effect hover-glow transition-all duration-300 group"
               >
+                <Download className="w-4 h-4 mr-2 group-hover:translate-y-1 transition-transform" />
                 Download Resume
               </Button>
             </motion.div>
@@ -192,7 +286,7 @@ const Hero = () => {
             />
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div

@@ -160,4 +160,97 @@
     -ms-user-select: none;
     user-select: none;
   }
+
+  /* Animation keyframes */
+  @keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+  @keyframes blink {
+    50% { border-color: transparent; }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes parallax-float {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    33% { transform: translateY(-10px) scale(1.02); }
+    66% { transform: translateY(5px) scale(0.98); }
+  }
+
+  @keyframes scroll-reveal {
+    from { 
+      opacity: 0;
+      transform: translateY(30px) scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* Animation classes */
+  .animate-typewriter {
+    animation: typewriter 3s steps(20, end) forwards;
+  }
+
+  .animate-blink {
+    animation: blink 1s infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-parallax-float {
+    animation: parallax-float 8s ease-in-out infinite;
+  }
+
+  .animate-scroll-reveal {
+    animation: scroll-reveal 0.8s ease-out forwards;
+  }
+
+  .animate-marquee {
+    animation: marquee 30s linear infinite;
+  }
+
+  /* Performance optimizations for animations */
+  .floating-particle,
+  .bg-pulse,
+  .hero-reveal {
+    will-change: transform, opacity;
+  }
+
+  /* Reduced motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .floating-particle,
+    .animate-parallax-float,
+    .bg-pulse {
+      animation: none;
+    }
+    
+    .hero-reveal {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
