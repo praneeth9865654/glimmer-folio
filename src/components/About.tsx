@@ -80,25 +80,17 @@ const About = () => {
               <CardContent className="p-8">
                 <h3 className="text-2xl font-bold mb-6 hero-text">My Journey</h3>
                 
-                {/* Animated Description Lines */}
-                <div className="space-y-6 overflow-hidden">
-                  <motion.div
-                    style={{ 
-                      x: useTransform(scrollYProgress, [0, 1], [0, -50])
-                    }}
-                    className="text-2xl lg:text-3xl font-black leading-tight bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent"
-                  >
-                    Crafting digital experiences that inspire and innovate
-                  </motion.div>
-                  
-                  <motion.div
-                    style={{ 
-                      x: useTransform(scrollYProgress, [0, 1], [0, 50])
-                    }}
-                    className="text-2xl lg:text-3xl font-black leading-tight bg-gradient-to-r from-accent via-cyan-400 to-primary bg-clip-text text-transparent"
-                  >
-                    Turning complex problems into elegant solutions
-                  </motion.div>
+                {/* Personal Description */}
+                <div className="space-y-4">
+                  <p className="text-muted-foreground leading-relaxed text-lg">
+                    I'm a passionate developer with a love for creating beautiful, functional applications 
+                    that solve real-world problems. My journey in tech has been driven by curiosity and 
+                    a desire to continuously learn and grow.
+                  </p>
+                  <p className="text-muted-foreground leading-relaxed text-lg">
+                    With expertise in modern web technologies and a keen eye for design, I strive to 
+                    bridge the gap between technical excellence and user experience.
+                  </p>
                 </div>
                 
                 <motion.p 

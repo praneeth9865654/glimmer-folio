@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
+import InfiniteJourney from '@/components/InfiniteJourney';
 import TechStack from '@/components/TechStack';
 import Experience from '@/components/Experience';
 import Projects from '@/components/Projects';
@@ -42,6 +43,15 @@ const Index = () => {
           transition={{ duration: 0.8 }}
         >
           <About />
+        </motion.section>
+        
+        <motion.section 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+        >
+          <InfiniteJourney />
         </motion.section>
         
         <motion.section 

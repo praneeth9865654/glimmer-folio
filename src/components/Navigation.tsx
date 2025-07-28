@@ -64,9 +64,14 @@ const Navigation = () => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="text-muted-foreground hover:text-primary transition-colors duration-300 font-medium"
+                className="relative text-muted-foreground hover:text-primary transition-colors duration-300 font-medium group"
               >
                 {item.name}
+                <motion.div
+                  className="absolute bottom-0 left-0 w-full h-0.5 bg-primary origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                  initial={{ scaleX: 0 }}
+                  whileHover={{ scaleX: 1 }}
+                />
               </motion.button>
             ))}
           </div>
@@ -75,10 +80,27 @@ const Navigation = () => {
           <div className="hidden md:block">
             <Button 
               variant="outline"
-              className="glass-effect hover-glow transition-all duration-300"
+              className="glass-effect relative overflow-hidden group transition-all duration-300"
               onClick={() => scrollToSection('#contact')}
             >
-              Get In Touch
+              <span className="relative z-10">Get In Touch</span>
+              {/* Animated wave background */}
+              <motion.div
+                className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-100"
+                initial={{ x: '-100%' }}
+                whileHover={{ 
+                  x: '100%',
+                  transition: { 
+                    duration: 0.6,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    repeatType: "loop"
+                  }
+                }}
+                style={{
+                  background: 'linear-gradient(90deg, transparent, hsl(var(--primary)/0.3), transparent)'
+                }}
+              />
             </Button>
           </div>
 

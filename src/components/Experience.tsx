@@ -143,153 +143,89 @@ const Experience = () => {
             className="mb-16"
           >
             <h3 className="text-2xl font-bold mb-8 text-center">Work Experience</h3>
-            <div className="space-y-8">
-              {experiences.map((exp, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ 
-                    duration: 1, 
-                    delay: index * 0.3,
-                    type: "spring",
-                    stiffness: 80
-                  }}
-                  className={`group relative ${index % 2 === 0 ? 'lg:pr-8' : 'lg:pl-8'}`}
-                >
-                  {/* Timeline Dot */}
-                  <motion.div 
-                    className="absolute top-8 left-1/2 w-4 h-4 bg-primary rounded-full transform -translate-x-1/2 z-20 border-4 border-background"
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
+            <div className="relative max-w-6xl mx-auto">
+              {/* Central Timeline Line */}
+              <motion.div
+                initial={{ height: 0 }}
+                whileInView={{ height: "100%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+                className="absolute left-1/2 transform -translate-x-1/2 w-0.5 bg-gradient-to-b from-primary via-accent to-primary opacity-60"
+              />
+
+              <div className="space-y-16">
+                {experiences.map((experience, index) => (
+                  <motion.div
+                    key={experience.title}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -80 : 80 }}
+                    whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.3 + 0.5 }}
-                  />
-                  
-                  {/* Connecting Lines */}
-                  <motion.div 
-                    className={`absolute top-8 ${index % 2 === 0 ? 'right-1/2 left-8' : 'left-1/2 right-8'} h-px bg-gradient-to-r from-primary/50 to-transparent`}
-                    initial={{ scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.3 + 0.7, duration: 0.8 }}
-                    style={{ originX: index % 2 === 0 ? 1 : 0 }}
-                  />
+                    transition={{ duration: 0.8, delay: index * 0.2 }}
+                    className={`relative flex items-center ${
+                      index % 2 === 0 ? 'justify-start' : 'justify-end'
+                    }`}
+                  >
+                    {/* Timeline Node */}
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.2 + 0.3 }}
+                      className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-2 border-background shadow-lg z-10"
+                      style={{
+                        boxShadow: '0 0 15px hsl(var(--primary)/0.6)'
+                      }}
+                    />
 
-                  <Card className={`glass-effect border-border/50 hover-glow overflow-hidden ${index % 2 === 0 ? 'lg:mr-8' : 'lg:ml-8'}`}>
-                    <CardContent className="p-6 sm:p-8 relative">
-                      {/* Modern Background Pattern */}
-                      <motion.div
-                        className="absolute inset-0 opacity-0 group-hover:opacity-100"
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-                        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-                        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
-                      </motion.div>
-                      
-                      <div className="relative z-10">
-                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-6">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-3">
-                              <motion.div
-                                whileHover={{ rotate: 360, scale: 1.1 }}
-                                transition={{ duration: 0.5 }}
-                                className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-primary/20"
-                              >
-                                <Code className="w-6 h-6 text-primary" />
-                              </motion.div>
-                              <div>
-                                <h4 className="text-xl font-bold group-hover:text-primary transition-colors duration-300">
-                                  {exp.title}
-                                </h4>
-                                <motion.div 
-                                  className="w-12 h-0.5 bg-gradient-to-r from-primary to-accent mt-1"
-                                  initial={{ scaleX: 0 }}
-                                  whileInView={{ scaleX: 1 }}
-                                  viewport={{ once: true }}
-                                  transition={{ delay: index * 0.3 + 1 }}
-                                />
-                              </div>
-                            </div>
-                            
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 text-muted-foreground mb-2">
-                              <span className="font-medium text-primary">{exp.company}</span>
-                              <div className="flex items-center space-x-1">
-                                <MapPin className="w-4 h-4" />
-                                <span className="text-sm">{exp.location}</span>
-                              </div>
-                            </div>
-                            
-                            <div className="flex items-center space-x-1 text-muted-foreground mb-4">
-                              <Calendar className="w-4 h-4" />
-                              <span className="text-sm">{exp.period}</span>
-                            </div>
+                    {/* Experience Card - Smaller and Alternating */}
+                    <Card className={`glass-effect border-border/30 hover-glow transition-all duration-500 w-full max-w-md ${
+                      index % 2 === 0 ? 'mr-8 lg:mr-16' : 'ml-8 lg:ml-16'
+                    }`}>
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h3 className="text-xl font-bold hero-text mb-1">
+                              {experience.title}
+                            </h3>
+                            <p className="text-base text-primary font-semibold mb-1">
+                              {experience.company}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {experience.period}
+                            </p>
                           </div>
+                          <motion.div
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.5 }}
+                            className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0"
+                          >
+                            <Code className="w-5 h-5 text-primary" />
+                          </motion.div>
                         </div>
-                      </div>
-
-                      <p className="text-muted-foreground mb-6 leading-relaxed">
-                        {exp.description}
-                      </p>
-
-                        {/* Technologies */}
-                        <div className="mb-6 relative z-10">
-                          <div className="flex items-center gap-2 mb-4">
-                            <Zap className="w-4 h-4 text-accent" />
-                            <h5 className="font-medium">Technologies Used</h5>
-                          </div>
-                          <div className="flex flex-wrap gap-2">
-                            {exp.technologies.map((tech, techIndex) => (
-                              <motion.div
-                                key={techIndex}
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: techIndex * 0.1 }}
-                                whileHover={{ scale: 1.1 }}
-                              >
-                                <Badge
-                                  variant="secondary"
-                                  className="glass-effect hover:bg-primary/20 transition-colors duration-300"
-                                >
-                                  {tech}
-                                </Badge>
-                              </motion.div>
-                            ))}
-                          </div>
+                        
+                        <p className="text-muted-foreground leading-relaxed mb-4 text-sm">
+                          {experience.description}
+                        </p>
+                        
+                        <div className="flex flex-wrap gap-1.5">
+                          {experience.technologies.slice(0, 4).map((tech, techIndex) => (
+                            <motion.span
+                              key={tech}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              whileInView={{ opacity: 1, scale: 1 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.3, delay: index * 0.2 + techIndex * 0.1 }}
+                              className="px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium border border-primary/20"
+                            >
+                              {tech}
+                            </motion.span>
+                          ))}
                         </div>
-
-                        {/* Achievements */}
-                        <div className="relative z-10">
-                          <div className="flex items-center gap-2 mb-4">
-                            <Trophy className="w-4 h-4 text-accent" />
-                            <h5 className="font-medium">Key Achievements</h5>
-                          </div>
-                          <ul className="space-y-3">
-                            {exp.achievements.map((achievement, achIndex) => (
-                              <motion.li
-                                key={achIndex}
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: achIndex * 0.1 }}
-                                className="flex items-start space-x-3 text-muted-foreground group-hover:text-foreground transition-colors duration-300"
-                              >
-                                <motion.div 
-                                  className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"
-                                  whileHover={{ scale: 1.5 }}
-                                />
-                                <span className="leading-relaxed">{achievement}</span>
-                              </motion.li>
-                            ))}
-                          </ul>
-                        </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.div>
 
